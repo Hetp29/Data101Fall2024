@@ -4,4 +4,5 @@ getwd()
 moody <- read.csv('moody2022.csv') #read csv file with above line of code
 head(moody) 
 
+getwd()
 
