@@ -44,3 +44,50 @@ price_variance_by_sector
 #Variance in stock prices across sectors shows Consumer Cyclical sector has highest price variance at 1,880,471.45
 #utilities and energy sector exhibit lower price variance (more consistent pricing)
 #Clickbait title: Consumer Cyclical Stocks have 1000x more price volatility than energy!
+
+#Query 5
+company_count_by_sector <- table(sp500_data$Sector)
+company_count_by_sector
+#Above we see number of companies in S&P 500 per sector
+#technology leads with 80 companies, industrialis is second with 70
+#Clickbait title: Technology dominates the S&P 500 with the most companies.
+
+#Query 6
+positive_growth_companies <- subset(sp500_data, Revenuegrowth > 0)
+positive_growth_by_sector <- table(positive_growth_companies$Sector)
+positive_growth_by_sector
+#Technology has 58 companies showing positive revenue growth (the most)
+#financial services and industrials have 53 each companies with positive revenue growth 
+#consumer cyclical has 41 companies seeing growth 
+#energy has 21 growing companies, utilities has 24
+#Clickbait title: Technology, financial companies, and industrials have over 50 companies seeing positive revenue!
+
+#Query 7
+sd_ebitda_by_sector <- tapply(sp500_data$Ebitda, sp500_data$Sector, sd)
+sd_ebitda_by_sector
+#standard deviation of Editda is earnings before interest and taxes for each sector
+#Communication services and technology have more volatile earnings 
+#high amount indicates there's large variation in earnings among companies in that sector
+#more companies in communication and technology have high earnings
+#Clickbait title: Communication services earnings swing $35 billion in S&P 500
+
+#Query 8
+top_5_revenue_growth <- sp500_data[order(-sp500_data$Revenuegrowth), ]
+top_5_revenue_growth <- head(subset(top_5_revenue_growth, select = c(Symbol, Longname, Revenuegrowth)), 5)
+top_5_revenue_growth
+#Top 5 companies by revenue growth in S&P 500 are lead by SMCI (143%), NVIDIA (122%), MU (81.5%), NEM (64.1%), and EXR (57.8%)
+#CLickbait title: Super Micro Leads the Charge: 5 companies with explosive revenue growth in the S&P 500.
+
+#Query 9
+top_5_current_price <- sp500_data[order(-sp500_data$Currentprice), ]
+top_5_current_price <- head(subset(top_5_current_price, select = c(Symbol, Longname, Currentprice)), 5)
+top_5_current_price
+#top 5 companies with highest stock prices are led by NVR, Booking Holdings, AZO, FICO, and MTD (highest price stocks in S&P 500)
+#Clickbait title: The 5 most expensive stocks in the S&P 500-One costs over $9000
+
+#Query 10
+industry_distribution <- table(sp500_data$Industry)
+sorted_industry_distribution <- sort(industry_distribution, decreasing = TRUE)
+sorted_industry_distribution
+#Utilities - Regulated Electric Industry has highest amount of companies in S&P 500
+#The S&P 500's Biggest Players: Utilties lead with most companies in the index!
