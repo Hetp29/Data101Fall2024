@@ -91,3 +91,15 @@ sorted_industry_distribution <- sort(industry_distribution, decreasing = TRUE)
 sorted_industry_distribution
 #Utilities - Regulated Electric Industry has highest amount of companies in S&P 500
 #The S&P 500's Biggest Players: Utilties lead with most companies in the index!
+
+#barplot for top 5 companies by market cap
+top_5_companies <- head(sp500_data[order(-sp500_data$Marketcap), ], 5)
+colors <- c('red', 'blue', 'cyan', 'yellow', 'green')
+barplot(top_5_companies$Marketcap / 1e12, names.arg = top_5_companies$Symbol, col=colors, main="Top 5 Companies by Market Cap", xlab="Company", ylab="Market Cap (in Trillions)", 
+        border="black")
+#Clickbait Title: The 5 giants holding trillions in market cap in the S&P 500!
+
+# Scatter plot for EBITDA vs Market Cap
+plot(sp500_data$Ebitda / 1e12, sp500_data$Marketcap / 1e12, xlab="EBITDA", ylab="Market Cap", 
+     main="Scatter Plot: Market Cap vs. EBITDA", col="blue", pch=19)
+#Clickbait Title: Can bigger earnings before interest really lead to bigger market riches? The suprising truth!
