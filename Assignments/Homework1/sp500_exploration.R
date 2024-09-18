@@ -74,8 +74,10 @@ barplot(top_5_companies$Marketcap / 1e12, names.arg = top_5_companies$Symbol, co
 #Clickbait Title: The 5 giants holding trillions in market cap in the S&P 500!
 
 # Scatter plot for EBITDA vs Market Cap
-plot(sp500_data$Ebitda / 1e12, sp500_data$Marketcap / 1e12, xlab="EBITDA", ylab="Market Cap", 
+plot(sp500_data$Ebitda / 1e12, sp500_data$Marketcap / 1e12, xlab="EBITDA (Trillions)", ylab="Market Cap (Trillions)", 
      main="Scatter Plot: Market Cap vs. EBITDA", col="blue", pch=19)
+abline(ln(sp500_data$Marketcap / 1e12 ~ sp500_data$Ebitda / 1e12), col = "red")
+grid(nx = NA, ny = NULL, col = "gray", lty = "dotted")
 #Clickbait Title: Can bigger earnings before interest really lead to bigger market riches? The suprising truth!
 
 #box plot for stock prices across sectors
@@ -87,18 +89,18 @@ boxplot(sp500_data$Currentprice ~ sp500_data$Sector, xlab="Sector", ylab = "Curr
                 sp500_data$Sector == 'Consumer Cyclical')
 #Clickbait Title: Explosive Stock Prices in Consumer Cyclical: One Sector's Stocks Skyrocket While Others Stay Grounded
 
+#mosaic plot
+# Adjust the layout of the mosaic plot
+par(mai = c(1.5, 1, 1, 1))  
+sp500_data$RevenueGrowth_Category <- ifelse(sp500_data$Revenuegrowth >= 0, "Positive Growth", "Negative Growth")
+all_sectors_revenue_table <- table(sp500_data$Sector, sp500_data$RevenueGrowth_Category)
+colors <- c('red', 'blue')
+mosaicplot(all_sectors_revenue_table, xlab = 'Sector', ylab = 'Revenue Growth Category', 
+           main = "Revenue Growth by Sector", col = colors, las = 2, 
+           cex.axis = 0.8, border = "black")
+#Clickbait title: Which Sectors are struggling? Discover revenue growth divide in S&P 500!
 
-top_5_sectors <- c("Technology", "Industrials", "Healthcare", "Consumer Cyclical", "Financial Services")
-sp500_data_top5 <- sp500_data[sp500_data$Sector %in% top_5_sectors, ]
-sp500_data_top5$RevenueGrowth_Category <- ifelse(sp500_data_top5$Revenuegrowth >= 0, "Positive Growth", "Negative Growth")
-top_5_sectors_revenue_table <- table(sp500_data_top5$Sector, sp500_data_top5$RevenueGrowth_Category)
-colors <- c('red', 'blue') 
-mosaicplot(top_5_sectors_revenue_table, xlab = 'Sector', ylab = 'Revenue Growth Category', 
-           main = "Mosaic Plot: Revenue Growth by Top 5 Sectors", col = colors, border = "black")
-#Clickbait title: Which Sectors are thriving? See the revenue growth across the S&P 500's Top 5 Sectors
-
-
-#top 5 companies by current stock price
+#top 5 companies by current stock price (bar plot)
 top_5_current_price <- sp500_data[order(-sp500_data$Currentprice), ]
 top_5_current_price <- head(subset(top_5_current_price, select = c(Symbol, Longname, Currentprice)), 5)
 colors <- c('red', 'blue', 'cyan', 'yellow', 'green')
@@ -106,3 +108,20 @@ barplot(top_5_current_price$Currentprice, names.arg = top_5_current_price$Symbol
         col=colors, main="Top 5 Companies by Current Stock Price",
         xlab = "Company", ylab = "Current Stock Price", border = "black")
 #Clickbait title: The $9000 Stock: Meet the most expensive companies in the S&P 500!
+
+# Create boxplot for Revenue Growth by Sector
+par(mai = c(1.5, 1, 1, 1))
+boxplot(sp500_data$Revenuegrowth ~ sp500_data$Sector, 
+        col = rainbow(length(unique(sp500_data$Sector))), 
+        xlab = "Sector", 
+        ylab = "Revenue Growth", 
+        main = "Boxplot of Revenue Growth by Sector",
+        las = 2,  # Rotate x-axis labels for readability
+        border = "black", 
+        outline = FALSE, 
+        ylim = c(min(sp500_data$Revenuegrowth, na.rm = TRUE), max(sp500_data$Revenuegrowth, na.rm = TRUE)),
+        cex.axis = 0.8)  
+grid(nx = NA, ny = NULL, col = "gray", lty = "dotted")
+#Clickbait title: Which sectors are leading revenue growth? Find out where the winners and losers of S&P 500 are!
+#Technology dominates 
+
