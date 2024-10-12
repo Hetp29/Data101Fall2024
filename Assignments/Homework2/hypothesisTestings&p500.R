@@ -18,6 +18,7 @@ tapply(sp500_data$Fulltimeemployees, sp500_data$Sector, mean)
 #Null hypothesis: There is no significant difference in the number of full-time employees between Technology and Consumer Defensive sectors.
 #Alternative hypothesis: There is a significant difference in the number of full-time employees between Technology and Consumer Defensive sectors.
 p_value1 <- permutation_test(sp500_data, 'Sector', 'Fulltimeemployees', 50000, 'Technology', 'Consumer Defensive')
+cat("Tech Giants or Staffing Powerhouses? Full-Time Employee Count Shows Massive Sector Gap!\n") #Title for first hypothesis test
 cat("The significance level for this test is: 0.05\n")
 cat("The p-value for hypothesis 1 (very low p-value) is:", p_value1, "\n")
 #p-value is 0.00576, we can reject null hypothesis with confidence
@@ -27,6 +28,7 @@ cat("The p-value for hypothesis 1 (very low p-value) is:", p_value1, "\n")
 #Null hypothesis: There is no difference in the current price between companies in the energy and industrials sectors.
 #Alternative hypothesis: There is a significant difference in the current price between companies in the energy and industrials sectors.
 p_value2 <- permutation_test(sp500_data, 'Sector', 'Currentprice', 50000, 'Energy', 'Industrials')
+cat("Energy vs Industrials: The Price Battle You Didn't See Coming!\n") #Title for second hypothesis test
 cat("The significance level for this test is: 0.05\n")
 cat("The p-value for hypothesis 2 (close call) is:", p_value2, "\n")
 #p-value is 0.03896, we can reject null hypothesis but this one is a close call!
@@ -36,6 +38,7 @@ cat("The p-value for hypothesis 2 (close call) is:", p_value2, "\n")
 #Null hypothesis: There is no significant difference in market cap between companies in the consumer defensive and healthcare sectors. 
 #Alternative hypothesis: There is a significant difference in market cap between companies in the consumer defensive and healthcare sectors.
 p_value3 <- permutation_test(sp500_data, 'Sector', 'Marketcap', 50000, 'Consumer Defensive', 'Healthcare')
+cat("Marketcap Standoff: No Clear Winner Between Healthcare and Consumer Defensive!\n") #Title for third hypothesis test
 cat("The significance level for this test is: 0.05\n")
 cat("The p-value for hypothesis 3 (rejecting the null hypothesis) is:", p_value3, "\n")
 #p-value is 0.42626, we cannot reject the null hypothesis 
