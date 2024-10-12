@@ -40,3 +40,24 @@ cat("The significance level for this test is: 0.05\n")
 cat("The p-value for hypothesis 3 (rejecting the null hypothesis) is:", p_value3, "\n")
 #p-value is 0.42626, we cannot reject the null hypothesis 
 #there is no significant difference in market cap between companies in consumer defensive and healthcare sectors
+
+#Narrow query
+M0 <- mean(sp500_data$Marketcap)
+cat("The overall mean of Marketcap (M0) is:", M0, "\n")
+#mean for overall market cap is: $103.8 billion
+
+Narrow <- subset(sp500_data, Sector == 'Real Estate' & Exchange == 'NYQ')
+
+M <- mean(Narrow$Marketcap)
+cat("The mean of Marketcap for the narrow query (M) is:", M, "\n")
+#mean market cap for real estate sector is $39.49 billion 
+
+cat("M =", M, "and M0 =", M0, "\n")
+cat("2 * M0 =", 2 * M0, "and 1/2 * M0 =", 0.5 * M0, "\n")
+
+cat("Does M > 2 * M0? ", M > 2 * M0, "\n")
+cat("Does M < 1/2 * M0? ", M < 0.5 * M0, "\n")
+#1/2 * M0 equals $51.9 billion, and M = $39.49 billion, so M < 1/2 * M0 is satisfied
+#Null hypothesis: There is no significant difference in market cap between entire dataset and narrow subset with real estate sector on NYQ exchange
+#Alternative hypothesis: There is a significant difference in market cap between entire dataset and the narrow subset
+#conclusion: Since M < 1/2 * M0, we can reject null hypothesis and conclude market cap for real estate sector on NYQ exchange is significantly smaller than overall mean
