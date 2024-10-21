@@ -115,3 +115,28 @@ cat("Sample size needed for Female Proportion with 90% confidence:", n_sex_90, "
 #To achieve new margin of error with 90% confidence, we need sample size of 123.96 for both age and female proportion. 
 #This sample size is larger than 5% sample since larger sample size is required to achieve smaller margin of error with higher confidence.
 
+#Task 3: confidence interval two categorical variables
+C1 <- 'Sex'
+C2 <- 'Survived'
+c1 <- 'female'
+c2 <- '1'
+
+subset_S <- dataset[dataset$Sex == c1 & dataset$Survived == c2, ] 
+total_tuples <- nrow(dataset)
+
+p_hat_S <- nrow(subset_S) / total_tuples #fraction of tuples where both conditions hold
+
+se_S <- sqrt((p_hat_S * (1 - p_hat_S)) / total_tuples) #standard error for proportion
+
+z_90 <- qnorm(1 - 0.05) #z-value for 90% confidence
+moe_S<- z_90 * se_S #margin of error
+
+ci_lower_S <- p_hat_S - moe_S
+ci_upper_S <- p_hat_S + moe_S
+
+cat("Proportion of female survivors (p-hat):", p_hat_S, "\n")
+cat("90% Confidence Interval: [", ci_lower_S, ",", ci_upper_S, "]\n")
+#Proportion of female survivors is 0.2598, so approximately 26% of total dataset consist of female survivors
+#90% confidence interval is [0.2356, 0.2840] which means that we're 90% confident that true proportion of female survivors falls within this range
+
+#Task 4: at least 5% for numerical variable N
