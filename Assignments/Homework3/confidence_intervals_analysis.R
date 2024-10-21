@@ -140,3 +140,55 @@ cat("90% Confidence Interval: [", ci_lower_S, ",", ci_upper_S, "]\n")
 #90% confidence interval is [0.2356, 0.2840] which means that we're 90% confident that true proportion of female survivors falls within this range
 
 #Task 4: at least 5% for numerical variable N
+#loop through to find subset with narrowest confidence interval for mean of numerical variable age
+N <- 'Age'
+
+min_rows <- 0.05 * nrow(dataset)
+subset_data <- dataset[sample(1:nrow(dataset), min_rows), ]
+
+n <- nrow(subset_data)
+mean_age <- mean(subset_data[[N]])
+sd_age <- sd(subset_data[[N]])
+se_age <- sd_age / sqrt(n)
+z_90 <- qnorm(1 - 0.05)
+moe_age <- z_90 * se_age
+ci_lower_age <- mean_age - moe_age
+ci_upper_age <- mean_age + moe_age
+narrowest_width <- ci_upper_age - ci_lower_age
+best_subset <- subset_data
+
+for(i in 2:100) {
+  subset_data <- dataset[sample(1:nrow(dataset), min_rows + 10), ]
+  
+  n <- nrow(subset_data)
+  mean_age <- mean(subset_data[[N]])
+  sd_age <- sd(subset_data[[N]])
+  se_age <- sd_age / sqrt(n)
+  
+  moe_age <- z_90 * se_age
+  ci_lower_age <- mean_age - moe_age
+  ci_upper_age <- mean_age + moe_age
+  
+  ci_width <- ci_upper_age - ci_lower_age
+  
+  if (ci_width < narrowest_width) {
+    narrowest_width <- ci_width
+    best_subset <- subset_data
+  }
+}
+
+mean_age_best <- mean(best_subset[[N]])
+sd_age_best <- sd(best_subset[[N]])
+se_age_best <- sd_age_best / sqrt(nrow(best_subset))
+moe_age_best <- z_90 * se_age_best
+ci_lower_best <- mean_age_best - moe_age_best
+ci_upper_best <- mean_age_best + moe_age_best
+
+cat("Best Subset Size:", nrow(best_subset), "\n")
+cat("Mean Age in Best Subset:", mean_age_best, "\n")
+cat("90% Confidence Interval for Mean Age in Best Subset: [", ci_lower_best, ",", ci_upper_best, "]\n")
+cat("Narrowest CI Width:", ci_upper_best - ci_lower_best, "\n")
+#Best subset size is 54 which is greater than minimum 5% of data points
+#mean age in best subset is 35.98 years
+#90% confidence interval for mean age is [32.63, 39.33]
+#narrowest confidence interval width is 6.70
