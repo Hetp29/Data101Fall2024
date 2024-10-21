@@ -83,3 +83,35 @@ cat("50% Sample - Female Proportion MOE:", moe_sex_50, "\n")
 #Female proportion MOE goes from 0.34 at 1% sample to 0.15 at 5% sample to0.045 at 50% sample
 #Key Takeaway: Margin of error decreases as sample size increases. This aligns with theory that a larger sample size provides more precise results. 
 #WE calculated confidence intervals for mean o age and confidence intervals of specific value of sex (female)
+
+#Task 2: smaller MER
+new_mer_age <- moe_age_5 / 2 #50% smaller margin of error for age
+new_mer_sex <- moe_sex_5 / 2 #50% smaller margin of error for female proportion
+
+#Age
+z_age_new <- new_mer_age / se_age_5
+confidence_level_age <- 2 * pnorm(z_age_new) - 1
+
+#Female proportion 
+z_sex_new <- new_mer_sex / se_sex_5
+confidence_level_sex <- 2 * pnorm(z_sex_new) - 1
+
+cat("New Confidence Level for Age (with smaller MER):", confidence_level_age * 100, "%\n")
+cat("New Confidence Level for Female Proportion (with smaller MER):", confidence_level_sex * 100, "%\n")
+
+#Sample size needed to achieve new margin of error with 90% confidence
+#For age
+z_90 <- qnorm(1 - 0.05)
+n_age_90 <- (z_90 * sd_age_5 / new_mer_age)^2
+
+#For female proportion
+p_hat <- p_hat_sex_5
+n_sex_90 <- (z_90^2 * p_hat * (1 - p_hat)) / new_mer_sex^2
+
+cat("Sample size needed for Age with 90% confidence:", n_age_90, "\n")
+cat("Sample size needed for Female Proportion with 90% confidence:", n_sex_90, "\n")
+#The new confidence level for both age and female proportion with smaller margin of error (50% smaller than the 5% sample size MOE) is %67.29.
+#The smaller margin of error results in lower confidence level, which makes sense because smaller confidence intervals have less certainty.
+#To achieve new margin of error with 90% confidence, we need sample size of 123.96 for both age and female proportion. 
+#This sample size is larger than 5% sample since larger sample size is required to achieve smaller margin of error with higher confidence.
+
