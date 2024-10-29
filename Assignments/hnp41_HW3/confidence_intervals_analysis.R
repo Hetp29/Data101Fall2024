@@ -139,56 +139,81 @@ cat("90% Confidence Interval: [", ci_lower_S, ",", ci_upper_S, "]\n")
 #Proportion of female survivors is 0.2598, so approximately 26% of total dataset consist of female survivors
 #90% confidence interval is [0.2356, 0.2840] which means that we're 90% confident that true proportion of female survivors falls within this range
 
-#Task 4: at least 5% for numerical variable N
-#loop through to find subset with narrowest confidence interval for mean of numerical variable age
+#Task 4
+#Define numerical variable and minimum subset size
 N <- 'Age'
+min_rows <- 0.05 * nrow(dataset) #Minimum size for each subset
 
-min_rows <- 0.05 * nrow(dataset)
-subset_data <- dataset[sample(1:nrow(dataset), min_rows), ]
+#Define subsets based on Age ranges and ensure each has at least 5% of data points
+subset1 <- dataset[dataset$Age <= 20, ]
+subset2 <- dataset[dataset$Age > 20 & dataset$Age <= 40, ]
+subset3 <- dataset[dataset$Age > 40 & dataset$Age <= 60, ]
+subset4 <- dataset[dataset$Age > 60, ]
 
-n <- nrow(subset_data)
-mean_age <- mean(subset_data[[N]])
-sd_age <- sd(subset_data[[N]])
-se_age <- sd_age / sqrt(n)
+#Define the z-score for 90% confidence
 z_90 <- qnorm(1 - 0.05)
-moe_age <- z_90 * se_age
-ci_lower_age <- mean_age - moe_age
-ci_upper_age <- mean_age + moe_age
-narrowest_width <- ci_upper_age - ci_lower_age
-best_subset <- subset_data
 
-for(i in 2:100) {
-  subset_data <- dataset[sample(1:nrow(dataset), min_rows + 10), ]
-  
-  n <- nrow(subset_data)
-  mean_age <- mean(subset_data[[N]])
-  sd_age <- sd(subset_data[[N]])
-  se_age <- sd_age / sqrt(n)
-  
-  moe_age <- z_90 * se_age
-  ci_lower_age <- mean_age - moe_age
-  ci_upper_age <- mean_age + moe_age
-  
-  ci_width <- ci_upper_age - ci_lower_age
-  
-  if (ci_width < narrowest_width) {
-    narrowest_width <- ci_width
-    best_subset <- subset_data
-  }
-}
+#Calculate confidence intervals for each subset, or set values to NA if they don’t meet the minimum size
 
-mean_age_best <- mean(best_subset[[N]])
-sd_age_best <- sd(best_subset[[N]])
-se_age_best <- sd_age_best / sqrt(nrow(best_subset))
-moe_age_best <- z_90 * se_age_best
-ci_lower_best <- mean_age_best - moe_age_best
-ci_upper_best <- mean_age_best + moe_age_best
+if (nrow(subset1) >= min_rows) {
+  n1 <- nrow(subset1)
+  mean_age1 <- mean(subset1[[N]])
+  sd_age1 <- sd(subset1[[N]])
+  se_age1 <- sd_age1 / sqrt(n1)
+  moe_age1 <- z_90 * se_age1
+  ci_lower1 <- mean_age1 - moe_age1
+  ci_upper1 <- mean_age1 + moe_age1
+  ci_width1 <- ci_upper1 - ci_lower1
+} 
 
-cat("Best Subset Size:", nrow(best_subset), "\n")
-cat("Mean Age in Best Subset:", mean_age_best, "\n")
-cat("90% Confidence Interval for Mean Age in Best Subset: [", ci_lower_best, ",", ci_upper_best, "]\n")
-cat("Narrowest CI Width:", ci_upper_best - ci_lower_best, "\n")
-#Best subset size is 54 which is greater than minimum 5% of data points
-#mean age in best subset is 35.98 years
-#90% confidence interval for mean age is [32.63, 39.33]
-#narrowest confidence interval width is 6.70
+if (nrow(subset2) >= min_rows) {
+  n2 <- nrow(subset2)
+  mean_age2 <- mean(subset2[[N]])
+  sd_age2 <- sd(subset2[[N]])
+  se_age2 <- sd_age2 / sqrt(n2)
+  moe_age2 <- z_90 * se_age2
+  ci_lower2 <- mean_age2 - moe_age2
+  ci_upper2 <- mean_age2 + moe_age2
+  ci_width2 <- ci_upper2 - ci_lower2
+} 
+
+if (nrow(subset3) >= min_rows) {
+  n3 <- nrow(subset3)
+  mean_age3 <- mean(subset3[[N]])
+  sd_age3 <- sd(subset3[[N]])
+  se_age3 <- sd_age3 / sqrt(n3)
+  moe_age3 <- z_90 * se_age3
+  ci_lower3 <- mean_age3 - moe_age3
+  ci_upper3 <- mean_age3 + moe_age3
+  ci_width3 <- ci_upper3 - ci_lower3
+} 
+
+if (nrow(subset4) >= min_rows) {
+  n4 <- nrow(subset4)
+  mean_age4 <- mean(subset4[[N]])
+  sd_age4 <- sd(subset4[[N]])
+  se_age4 <- sd_age4 / sqrt(n4)
+  moe_age4 <- z_90 * se_age4
+  ci_lower4 <- mean_age4 - moe_age4
+  ci_upper4 <- mean_age4 + moe_age4
+  ci_width4 <- ci_upper4 - ci_lower4
+} 
+
+#Print each subset's confidence interval details
+cat("Subset 1: Age <= 20\n")
+cat("Size:", n1, "\nMean Age:", mean_age1, "\nCI Width:", ci_width1, "\n90% CI: [", ci_lower1, ",", ci_upper1, "]\n\n")
+
+cat("Subset 2: 20 < Age <= 40\n")
+cat("Size:", n2, "\nMean Age:", mean_age2, "\nCI Width:", ci_width2, "\n90% CI: [", ci_lower2, ",", ci_upper2, "]\n\n")
+
+cat("Subset 3: 40 < Age <= 60\n")
+cat("Size:", n3, "\nMean Age:", mean_age3, "\nCI Width:", ci_width3, "\n90% CI: [", ci_lower3, ",", ci_upper3, "]\n\n")
+
+cat("Subset 4: Age > 60\n")
+cat("Size:", n4, "\nMean Age:", mean_age4, "\nCI Width:", ci_width4, "\n90% CI: [", ci_lower4, ",", ci_upper4, "]\n\n")
+
+cat("Best Subset: 20 < Age <= 40\n")
+cat("Best Subset Size:", n2, "\n")
+cat("Mean Age in Best Subset:", mean_age2, "\n")
+cat("90% Confidence Interval for Mean Age: [", ci_lower2, ",", ci_upper2, "]\n")
+cat("Narrowest CI Width:", ci_width2, "\n")
