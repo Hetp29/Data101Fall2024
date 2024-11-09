@@ -217,3 +217,4 @@ cat("Best Subset Size:", n2, "\n")
 cat("Mean Age in Best Subset:", mean_age2, "\n")
 cat("90% Confidence Interval for Mean Age: [", ci_lower2, ",", ci_upper2, "]\n")
 cat("Narrowest CI Width:", ci_width2, "\n")
+
