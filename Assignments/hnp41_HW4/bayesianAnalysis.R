@@ -62,4 +62,45 @@ cat("The Posterior Probability of a company being in the Communication Services 
 
 
 #We checked if top 9.94% market cap increases odds of company being in communication services. The prior odds were 0.0457. After applying likelihood ratio of 2.98, the posterior probility rose to 0.12, showing that high market cap companies are nearly three times as likely to be in the communication services sector!
-#I calculated mean and sd of market cap to set approaximate threshold for top 10% (or you could say top 9.94%) using z-value of 0.25, which gave threshold close to true top 10%, verifying accuracy
+#I calculated mean and sd of market cap to set approximate threshold for top 10% (or you could say top 9.94%) using z-value of 0.25, which gave threshold close to true top 10%, verifying accuracy
+
+#Task 2: Contingency table T for two categorical variables in data
+t <- table(sp_500_dataset$Sector, sp_500_dataset$Revenuegrowth > 0)
+cat("Contingency table of Sector vs Positive Revenue Growth:\n")
+t
+
+#prior probability and prior odds for belief
+PriorProb <- sum(t["Technology", ]) / sum(t)
+PriorOdds <- PriorProb / (1 - PriorProb)
+cat("Prior Odds of being in the Technology sector:", PriorOdds, "\n")
+
+#true positive - probability of having positive revenue growth when in the Technology sector
+TruePositive <- t["Technology", 2] / sum(t["Technology", ])
+cat("True Positive rate for Technology sector and positive revenue growth:", TruePositive, "\n")
+
+#false positive - probability of having positive revenue growth not in technology sector
+FalsePositive <- sum(t[, 2]) - t["Technology", 2]
+FalsePositive <- FalsePositive / (sum(t) - sum(t["Technology", ])) 
+cat("False Positive rate for not being in Technology sector and positive revenue growth:", FalsePositive, "\n")
+
+#likelihood to have positive revenue growth in technology sector than in others
+LikelihoodRatio <- TruePositive / FalsePositive
+cat("Likelihood Ratio for Technology sector with positive revenue growth:", LikelihoodRatio, "\n")
+
+#posterior odds and posterior probability
+PosteriorOdds <- LikelihoodRatio * PriorOdds
+cat("Posterior Odds for Technology sector with positive revenue growth:", PosteriorOdds, "\n")
+
+PosteriorProbability <- PosteriorOdds / (1 + PosteriorOdds)
+cat("Posterior Probability for Technology sector with positive revenue growth:", PosteriorProbability, "\n")
+
+#We have a contingency table t where rows are sector (beliefs) and columns (observations) are whether the company has positive revenue growth 
+#This gives counts of companies in each sector that either have positive revenue growth (TRUE) or not (FALSE)
+#Prior odds of being in technology sector is 0.1872038
+#True positive rate for technology sector and positive revenue growth is 0.7341772 means that 73.4% of companues in technology sector have positive revenue growth
+#False positive rate for not being in technology sector and positive revenue growth is 0.7440758 which means 74.4% of companies outside the technology sector have positive revenue growth 
+#likelihood ratio for technology sector with positive revenue growth is 0.9866968 means likelihood of having positive revenue growth in technology sector is almost same as in other sectors, but bit less
+#posterior odds for technology sector with positive revenue growth is 0.1847134, decreased because likelihood is less than 1
+#Although the technology sector has a high true positive rate for positive revenue growth, it does not significantly outperform other sectors when considering false positives
+#T[i, j] or t[i, j] is true positive or probability of positive revenue growth in technology sector
+#T[k, l] or t[k, l] is false positive or probability of positive revenue growth outside the technology sector 
