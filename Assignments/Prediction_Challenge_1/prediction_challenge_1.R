@@ -1,0 +1,5 @@
+getwd()
+setwd("/Users/hetpatel/Data101Fall2024/Data101Fall2024/Assignments/Prediction_Challenge_1")
+MoodyTrain2024 <- read.csv("MoodyTrain2024.csv")
+MoodyTest2024 <- read.csv("MoodyTestStudents24.csv")
+submission <- read.csv("submission2024.csv")

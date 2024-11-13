@@ -104,3 +104,4 @@ cat("Posterior Probability for Technology sector with positive revenue growth:",
 #Although the technology sector has a high true positive rate for positive revenue growth, it does not significantly outperform other sectors when considering false positives
 #T[i, j] or t[i, j] is true positive or probability of positive revenue growth in technology sector
 #T[k, l] or t[k, l] is false positive or probability of positive revenue growth outside the technology sector 
+#two categorical variables are sector (belief) which represents what sector company belongs to and positive revenue growth (observation) which represents if company has had positive revenue growth or not
