@@ -22,6 +22,23 @@ decision[train$Score > 60] <- 'C'
 decision[train$Score > 75] <- 'B'
 decision[train$Score > 90] <- 'A'
 
+#refine decision rules
+subset_data <- subset(train, Score > 75 & Score <= 90)
+table(subset_data$Grade, subset_data$Major)
+
 accuracy <- mean(decision == train$Grade)
 print(paste("Accuracy of basic model:", accuracy))
+
+test_decision <- rep('F', nrow(test))
+test_decision[test$Score > 50] <- 'D'
+test_decision[test$Score > 60] <- 'C'
+test_decision[test$Score > 75] <- 'B'
+test_decision[test$Score > 90] <- 'A'
+
+#Adjust using refined rules
+test_decision[test$Score > 75 & test$Score <= 90 & test$Major == 'Math'] <- 'B'
+test_decision[test$Score > 75 & test$Score <= 90 & test$Major == 'CS' & test$Attendance > 0.9] <- 'A'
+
+submission$Grade <- test_decision
+write.csv(submission, "submission.csv", row.names = FALSE)
 
