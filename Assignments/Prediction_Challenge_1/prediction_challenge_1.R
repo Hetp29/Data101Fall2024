@@ -74,27 +74,52 @@ summary(misclassified$Attendance)
 summary(misclassified$Questions)
 
 
-decision <- rep('F', nrow(train))  
+# Initialize all predictions to 'F'
+decision <- rep('F', nrow(train))
 
-decision[train$Score <= 42 & train$Attendance <= 0.6 & train$Questions <= 5.5] <- 'F'
-decision[train$Score <= 42 & train$Attendance <= 0.6 & train$Questions > 5.5] <- 'F'
-decision[train$Score <= 42 & train$Attendance > 0.6 & train$Questions <= 4.5] <- 'F'
-decision[train$Score <= 42 & train$Attendance > 0.6 & train$Questions > 4.5] <- 'C'
+# Score <= 75.50
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance <= 0.66 & train$Questions <= 5.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance <= 0.66 & train$Questions > 5.50 & train$Attendance <= 0.33] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance <= 0.66 & train$Questions > 5.50 & train$Attendance > 0.33 & train$Score <= 25.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance <= 0.66 & train$Questions > 5.50 & train$Attendance > 0.33 & train$Score > 25.50] <- 'C'
 
-decision[train$Score > 42.5 & train$Score <= 50.5 & train$Questions <= 2.5] <- 'F'
-decision[train$Score > 42.5 & train$Score <= 50.5 & train$Questions > 2.5] <- 'C'
-decision[train$Score > 50.5 & train$Score <= 70.5] <- 'C'
-decision[train$Score > 70.5 & train$Score <= 75.5] <- 'C'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions <= 4.50 & train$Score <= 29.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions <= 4.50 & train$Score > 29.50 & train$Questions <= 2.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions <= 4.50 & train$Score > 29.50 & train$Questions > 2.50] <- 'C'
 
-decision[train$Score > 75.5 & train$Score <= 90.5 & train$Row <= 3.5 & train$Score <= 85.5] <- 'B'
-decision[train$Score > 75.5 & train$Score <= 90.5 & train$Row <= 3.5 & train$Score > 85.5] <- 'A'
-decision[train$Score > 75.5 & train$Score <= 90.5 & train$Row > 3.5 & train$Row <= 4.5] <- 'B'
-decision[train$Score > 75.5 & train$Score <= 90.5 & train$Row > 4.5] <- 'B'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions > 4.50 & train$Questions <= 5.50 & train$Score <= 16.00] <- 'F'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions > 4.50 & train$Questions <= 5.50 & train$Score > 16.00] <- 'C'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions > 4.50 & train$Questions > 5.50 & train$Score <= 7.00] <- 'C'
+decision[train$Score <= 75.50 & train$Score <= 42.50 & train$Attendance > 0.66 & train$Questions > 4.50 & train$Questions > 5.50 & train$Score > 7.00] <- 'C'
 
-decision[train$Score > 90.5] <- 'A'
+decision[train$Score <= 75.50 & train$Score > 42.50 & train$Score <= 50.50 & train$Questions <= 2.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score > 42.50 & train$Score <= 50.50 & train$Questions > 2.50 & train$Attendance <= 0.25 & train$Row <= 8.50] <- 'F'
+decision[train$Score <= 75.50 & train$Score > 42.50 & train$Score <= 50.50 & train$Questions > 2.50 & train$Attendance <= 0.25 & train$Row > 8.50] <- 'C'
+decision[train$Score <= 75.50 & train$Score > 42.50 & train$Score <= 50.50 & train$Questions > 2.50 & train$Attendance > 0.25] <- 'C'
 
+decision[train$Score <= 75.50 & train$Score > 50.50 & train$Score <= 70.50 & train$Score <= 60.50 & train$Questions <= 1.50] <- 'D'
+decision[train$Score <= 75.50 & train$Score > 50.50 & train$Score <= 70.50 & train$Score <= 60.50 & train$Questions > 1.50] <- 'C'
+decision[train$Score <= 75.50 & train$Score > 50.50 & train$Score <= 70.50 & train$Score > 60.50] <- 'C'
+
+decision[train$Score <= 75.50 & train$Score > 70.50 & train$Major <= 1.50 & train$Major <= 0.50] <- 'C'
+decision[train$Score <= 75.50 & train$Score > 70.50 & train$Major <= 1.50 & train$Major > 0.50] <- 'B'
+decision[train$Score <= 75.50 & train$Score > 70.50 & train$Major > 1.50] <- 'C'
+
+# Score > 75.50
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row <= 3.50 & train$Score <= 85.50] <- 'B'
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row <= 3.50 & train$Score > 85.50 & train$Score <= 89.50] <- 'A'
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row <= 3.50 & train$Score > 85.50 & train$Score > 89.50] <- 'B'
+
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row > 3.50 & train$Row <= 4.50 & train$Score <= 86.00] <- 'B'
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row > 3.50 & train$Row <= 4.50 & train$Score > 86.00] <- 'A'
+decision[train$Score > 75.50 & train$Score <= 90.50 & train$Row > 4.50] <- 'B'
+
+decision[train$Score > 90.50] <- 'A'
+
+# Calculate accuracy
 accuracy <- mean(decision == train$Grade)
 print(paste("Updated accuracy:", accuracy))
+
 
 misclassified <- train[decision != train$Grade, ]
 table(misclassified$Score, misclassified$Grade)
