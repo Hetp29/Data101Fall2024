@@ -40,5 +40,75 @@ test_decision[test$Score > 75 & test$Score <= 90 & test$Major == 'Math'] <- 'B'
 test_decision[test$Score > 75 & test$Score <= 90 & test$Major == 'CS' & test$Attendance > 0.9] <- 'A'
 
 submission$Grade <- test_decision
-write.csv(submission, "submission.csv", row.names = FALSE)
+write.csv(submission, "submission2024.csv", row.names = FALSE)
+
+#find classes where predictions do not match grades
+misclassified <- train[decision != train$Grade, ]
+table(misclassified$Score, misclassified$Grade)
+
+#grades below 60
+table(train[train$Score < 60, ]$Attendance, train[train$Score < 60, ]$Grade)
+table(train[train$Score < 60, ]$Questions, train[train$Score < 60, ]$Grade)
+
+subset_high <- subset(train, Score > 85)
+table(subset_high$Grade, subset_high$Major)
+
+misclassified <- train[decision != train$Grade, ]
+table(misclassified$Score, misclassified$Grade)
+table(misclassified$Attendance, misclassified$Grade)
+table(misclassified$Questions, misclassified$Grade)
+table(misclassified$Major, misclassified$Grade)
+
+subset_low <- subset(train, Score <= 60 & decision != train$Grade)
+subset_mid <- subset(train, Score > 60 & Score <= 90 & decision != train$Grade)
+subset_high <- subset(train, Score > 90 & decision != train$Grade)
+
+summary(subset_low)
+summary(subset_mid)
+summary(subset_high)
+
+table(misclassified$Major, misclassified$Grade)
+
+summary(misclassified$Attendance)
+summary(misclassified$Questions)
+
+
+
+# Initialize decision vector
+decision <- rep('F', nrow(train))
+
+# Low Scores (<= 50)
+decision[train$Score <= 50 & train$Attendance > 0.6 & train$Questions > 5] <- 'C'
+
+# Mid Scores (51-75)
+decision[train$Score > 50 & train$Score <= 75] <- 'C'
+decision[train$Score > 50 & train$Score <= 75 & train$Attendance > 0.8 & train$Questions > 7] <- 'B'
+decision[train$Score > 50 & train$Score <= 75 & train$Major == 'Econ' & train$Questions > 6] <- 'B'
+decision[train$Score > 50 & train$Score <= 75 & train$Major == 'Stats' & train$Attendance > 0.7] <- 'B'
+
+# High Scores (76-90)
+decision[train$Score > 75 & train$Score <= 90] <- 'B'
+decision[train$Score > 75 & train$Score <= 90 & train$Attendance > 0.8 & train$Questions > 7] <- 'A'
+
+# Very High Scores (> 90)
+decision[train$Score > 90] <- 'A'
+decision[train$Score > 90 & train$Attendance <= 0.5 & train$Questions <= 6] <- 'B'
+
+# Recalculate accuracy
+accuracy <- mean(decision == train$Grade)
+print(paste("Updated accuracy:", accuracy))
+
+# Analyze misclassified data
+misclassified <- train[decision != train$Grade, ]
+table(misclassified$Score, misclassified$Grade)
+
+
+# Recalculate accuracy
+accuracy <- mean(decision == train$Grade)
+print(paste("Updated accuracy:", accuracy))
+
+# Check remaining misclassifications
+misclassified <- train[decision != train$Grade, ]
+table(misclassified$Score, misclassified$Grade)
+
 
