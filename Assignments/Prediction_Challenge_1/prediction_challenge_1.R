@@ -75,8 +75,8 @@ summary(misclassified$Questions)
 
 
 decision <- rep('F', nrow(train))
-decision[train$Score <= 50 & train$Attendance > 0.6 & train$Questions > 5] <- 'C'
-decision[train$Score <= 50 & train$Attendance <= 0.6 & train$Questions <= 5] <- 'F'
+decision[train$Score <= 50 & train$Attendance > 0.44 & train$Questions > 5] <- 'C'
+decision[train$Score <= 50 & train$Attendance <= 0.44 & train$Questions <= 5] <- 'F'
 decision[train$Score > 50 & train$Score <= 75] <- 'C'
 decision[train$Score > 50 & train$Score <= 75 & train$Attendance > 0.8 & train$Questions > 7] <- 'B'
 decision[train$Score > 50 & train$Score <= 75 & train$Major == 'Stats' & train$Attendance > 0.75 & train$Questions > 7] <- 'B'
@@ -91,70 +91,4 @@ accuracy <- mean(decision == train$Grade)
 print(paste("Updated accuracy:", accuracy))
 misclassified <- train[decision != train$Grade, ]
 table(misclassified$Score, misclassified$Grade)
-
-
-
-
-# 1. Summary Statistics
-cat("Summary of Misclassified Cases:\n")
-summary(misclassified)
-cat("\nSummary of Correctly Classified Cases:\n")
-summary(train[decision == train$Grade, ])
-
-# 2. Class-wise Error Analysis
-cat("\nClass-wise Error Analysis (Actual vs Predicted Grades):\n")
-table(train$Grade, decision)
-
-# 3. Feature-Wise Comparison
-cat("\nFeature-Wise Averages for Misclassified Cases:\n")
-aggregate(cbind(Score, Attendance, Questions) ~ Grade, data = misclassified, FUN = mean)
-cat("\nFeature-Wise Averages for Correctly Classified Cases:\n")
-aggregate(cbind(Score, Attendance, Questions) ~ Grade, data = train[decision == train$Grade, ], FUN = mean)
-
-# 4. Focus on Problematic Grades
-cat("\nMisclassified Counts by Grade:\n")
-table(misclassified$Grade)
-
-# 5. Cross-tabulation of Features
-cat("\nCross-tabulation of Score vs Misclassified Grade:\n")
-table(cut(misclassified$Score, breaks = c(0, 50, 75, 90, 100)), misclassified$Grade)
-cat("\nCross-tabulation of Attendance vs Misclassified Grade:\n")
-table(cut(misclassified$Attendance, breaks = seq(0, 1, 0.2)), misclassified$Grade)
-
-# 6. Analyze Prediction Errors by Major
-cat("\nMisclassified Cases by Major:\n")
-table(misclassified$Major, misclassified$Grade)
-
-# 7. Inspect Boundary Conditions
-boundary_cases <- train[train$Score %in% c(50, 75, 90), ]
-cat("\nBoundary Cases (Score = 50, 75, 90):\n")
-table(boundary_cases$Score, boundary_cases$Grade)
-
-# 8. Investigate Individual Cases
-cat("\nFirst Few Misclassified Cases:\n")
-head(misclassified)
-
-# 9. Precision and Recall Analysis
-precision <- prop.table(table(decision, train$Grade), margin = 1)
-recall <- prop.table(table(decision, train$Grade), margin = 2)
-f1_score <- 2 * (precision * recall) / (precision + recall)
-cat("\nPrecision for Each Grade:\n")
-print(precision)
-cat("\nRecall for Each Grade:\n")
-print(recall)
-cat("\nF1 Score for Each Grade:\n")
-print(f1_score)
-
-# 10. Overlapping Ranges
-cat("\nOverlapping Ranges of Features for Misclassified Cases:\n")
-overlap <- aggregate(cbind(Score, Attendance, Questions) ~ Grade, data = misclassified, FUN = range)
-print(overlap)
-
-# 11. Correlation Between Features in Misclassified Cases
-cat("\nCorrelation Between Features in Misclassified Cases:\n")
-cor(misclassified[, c("Score", "Attendance", "Questions")], use = "complete.obs")
-
-# 12. Check New Rules or Adjust Thresholds
-cat("\nCases with Score > 90 and Attendance > 0.5 in Misclassified:\n")
-table(misclassified$Score > 90 & misclassified$Attendance > 0.5)
 
