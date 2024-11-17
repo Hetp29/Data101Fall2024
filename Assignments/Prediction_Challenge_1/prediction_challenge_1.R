@@ -74,8 +74,6 @@ summary(misclassified$Attendance)
 summary(misclassified$Questions)
 
 
-table(train$Major)
-
 decision <- rep('F', nrow(train))
 decision[train$Score <= 75 & train$Score <= 42 & train$Attendance <= 0.6 & train$Questions <= 5] <- 'F'
 decision[train$Score <= 75 & train$Score <= 42 & train$Attendance <= 0.6 & train$Questions > 5 & train$Attendance <= 0.3] <- 'F'
@@ -106,7 +104,9 @@ decision[train$Score > 75 & train$Score <= 90 & train$Row > 3 & train$Row <= 4 &
 decision[train$Score > 75 & train$Score <= 90 & train$Row > 4] <- 'B'
 decision[train$Score > 90] <- 'A'
 accuracy <- round(mean(decision == train$Grade), 2)
+accuracy_exact <- mean(decision == train$Grade)
 print(paste("Updated accuracy:", accuracy))
+print(paste("Exact accuracy:", accuracy_exact))
 misclassified <- train[decision != train$Grade, ]
 table(misclassified$Score, misclassified$Grade)
 #96% accuracy 
@@ -143,3 +143,4 @@ test_decision[test$Score > 90] <- 'A'
 
 submission$Grade <- test_decision
 write.csv(submission, "submission2024.csv", row.names = FALSE)
+
