@@ -1,0 +1,12 @@
+getwd()
+setwd("/Users/hetpatel/Data101Fall2024/Data101Fall2024/Assignments/Prediction_Challenge_2")
+train <- read.csv("couplesTrain.csv")
+test <- read.csv("CouplesTestStudents.csv")
+str(train)
+summary(train)
+colnames(train)
+table(train$Outcome)
+
+boxplot(GroomInc ~ Outcome, data = train, main = "Groom's Income by Outcome")
+boxplot(BrideInc ~ Outcome, data = train, main = "Bride's Income by Outcome")
+table(train$GroomMB, train$Outcome)

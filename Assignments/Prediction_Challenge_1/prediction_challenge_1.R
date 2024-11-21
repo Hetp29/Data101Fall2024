@@ -54,24 +54,24 @@ table(train[train$Score < 60, ]$Questions, train[train$Score < 60, ]$Grade)
 subset_high <- subset(train, Score > 85)
 table(subset_high$Grade, subset_high$Major)
 
-misclassified <- train[decision != train$Grade, ]
-table(misclassified$Score, misclassified$Grade)
-table(misclassified$Attendance, misclassified$Grade)
-table(misclassified$Questions, misclassified$Grade)
-table(misclassified$Major, misclassified$Grade)
+# misclassified <- train[decision != train$Grade, ]
+# table(misclassified$Score, misclassified$Grade)
+# table(misclassified$Attendance, misclassified$Grade)
+# table(misclassified$Questions, misclassified$Grade)
+# table(misclassified$Major, misclassified$Grade)
 
-subset_low <- subset(train, Score <= 60 & decision != train$Grade)
-subset_mid <- subset(train, Score > 60 & Score <= 90 & decision != train$Grade)
-subset_high <- subset(train, Score > 90 & decision != train$Grade)
+# subset_low <- subset(train, Score <= 60 & decision != train$Grade)
+# subset_mid <- subset(train, Score > 60 & Score <= 90 & decision != train$Grade)
+# subset_high <- subset(train, Score > 90 & decision != train$Grade)
 
-summary(subset_low)
-summary(subset_mid)
-summary(subset_high)
+# summary(subset_low)
+# summary(subset_mid)
+# summary(subset_high)
+# 
+# table(misclassified$Major, misclassified$Grade)
 
-table(misclassified$Major, misclassified$Grade)
-
-summary(misclassified$Attendance)
-summary(misclassified$Questions)
+# summary(misclassified$Attendance)
+# summary(misclassified$Questions)
 
 
 decision <- rep('F', nrow(train))
