@@ -144,3 +144,98 @@ test_decision[test$Score > 90] <- 'A'
 submission$Grade <- test_decision
 write.csv(submission, "submission2024.csv", row.names = FALSE)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Load necessary data
+train <- read.csv("MoodyTrain2024.csv")
+test <- read.csv("MoodyTestStudents24.csv")
+submission <- read.csv("submission2024.csv")
+
+# Split the training data into training and validation sets (80%-20% split)
+set.seed(123)  # Ensure reproducibility
+train_indices <- sample(1:nrow(train), 0.8 * nrow(train))
+validation_set <- train[-train_indices, ]
+training_set <- train[train_indices, ]
+
+# Function to apply decision rules
+apply_decision_rules <- function(data) {
+  decision <- rep('F', nrow(data))
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance <= 0.6 & data$Questions <= 5] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance <= 0.6 & data$Questions > 5 & data$Attendance <= 0.3] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance <= 0.6 & data$Questions > 5 & data$Attendance > 0.3 & data$Score <= 25] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance <= 0.6 & data$Questions > 5 & data$Attendance > 0.3 & data$Score > 25] <- 'C'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions <= 4 & data$Score <= 29] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions <= 4 & data$Score > 29 & data$Questions <= 2] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions <= 4 & data$Score > 29 & data$Questions > 2] <- 'C'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions > 4 & data$Questions <= 5 & data$Score <= 16] <- 'F'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions > 4 & data$Questions <= 5 & data$Score > 16] <- 'C'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions > 4 & data$Questions > 5 & data$Score <= 7] <- 'C'
+  decision[data$Score <= 75 & data$Score <= 42 & data$Attendance > 0.6 & data$Questions > 4 & data$Questions > 5 & data$Score > 7] <- 'C'
+  decision[data$Score <= 75 & data$Score > 42 & data$Score <= 50 & data$Questions <= 2] <- 'F'
+  decision[data$Score <= 75 & data$Score > 42 & data$Score <= 50 & data$Questions > 2 & data$Attendance <= 0.2 & data$Row <= 8] <- 'F'
+  decision[data$Score <= 75 & data$Score > 42 & data$Score <= 50 & data$Questions > 2 & data$Attendance <= 0.2 & data$Row > 8] <- 'C'
+  decision[data$Score <= 75 & data$Score > 42 & data$Score <= 50 & data$Questions > 2 & data$Attendance > 0.2] <- 'C'
+  decision[data$Score <= 75 & data$Score > 50 & data$Score <= 70 & data$Score <= 60 & data$Questions <= 1] <- 'D'
+  decision[data$Score <= 75 & data$Score > 50 & data$Score <= 70 & data$Score <= 60 & data$Questions > 1] <- 'C'
+  decision[data$Score <= 75 & data$Score > 50 & data$Score <= 70 & data$Score > 60] <- 'C'
+  decision[data$Score <= 75 & data$Score > 70 ] <- 'C'
+  decision[data$Score <= 75 & data$Score > 70 ] <- 'B'
+  decision[data$Score <= 75 & data$Score > 70 ] <- 'C'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row <= 3 & data$Score <= 85] <- 'B'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row <= 3 & data$Score > 85 & data$Score <= 89] <- 'A'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row <= 3 & data$Score > 85 & data$Score > 89] <- 'B'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row > 3 & data$Row <= 4 & data$Score <= 86] <- 'B'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row > 3 & data$Row <= 4 & data$Score > 86] <- 'A'
+  decision[data$Score > 75 & data$Score <= 90 & data$Row > 4] <- 'B'
+  decision[data$Score > 90] <- 'A'
+  return(decision)
+}
+
+# Apply decision rules to training set
+train_decision <- apply_decision_rules(training_set)
+
+# Evaluate training accuracy
+train_accuracy <- mean(train_decision == training_set$Grade)
+print(paste("Training Accuracy:", round(train_accuracy * 100, 2), "%"))
+
+# Apply decision rules to validation set
+validation_decision <- apply_decision_rules(validation_set)
+
+# Evaluate validation accuracy
+validation_accuracy <- mean(validation_decision == validation_set$Grade)
+print(paste("Validation Accuracy:", round(validation_accuracy * 100, 2), "%"))
+
+# Check for overfitting
+if (abs(train_accuracy - validation_accuracy) > 0.1) {
+  print("The model may be overfitting.")
+} else {
+  print("The model does not appear to be overfitting.")
+}
+
+# Apply decision rules to test set
+test_decision <- apply_decision_rules(test)
+
+# Save the predictions for the test set
+submission$Grade <- test_decision
+write.csv(submission, "submission2024.csv", row.names = FALSE)
+
+# Output misclassified cases in training set
+misclassified <- training_set[train_decision != training_set$Grade, ]
+print("Misclassified cases in the training set:")
+print(table(misclassified$Score, misclassified$Grade))
+
+
+#training accuracy of 95.62%, validation accuracy of 95.5%, difference is minimial so model is not overfitting
