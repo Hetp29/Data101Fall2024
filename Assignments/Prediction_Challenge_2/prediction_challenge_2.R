@@ -26,10 +26,12 @@ boxplot(TotalInc ~ Outcome, data = train, main = "Total Income by Outcome")
 
 
 tree <- rpart(Outcome ~ GroomMB + BrideMB + GroomInc + BrideInc + IncomeDiff + TotalInc,
-              data = train, method = "class",
-              control = rpart.control(minsplit = 50, minbucket = 25, cp = 0.01))
+              data = train, 
+              method = "class",
+              control = rpart.control(minsplit = 50, minbucket = 25, cp = 0.005))
 
 prediction <- predict(tree, train, type = "class")
 accuracy <- mean(prediction == train$Outcome)
 print(paste("Updated Training Accuracy:", accuracy))
+
 
