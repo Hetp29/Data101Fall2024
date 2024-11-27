@@ -94,8 +94,6 @@ decision[train$Score <= 75 & train$Score > 50 & train$Score <= 70 & train$Score 
 decision[train$Score <= 75 & train$Score > 50 & train$Score <= 70 & train$Score <= 60 & train$Questions > 1] <- 'C'
 decision[train$Score <= 75 & train$Score > 50 & train$Score <= 70 & train$Score > 60] <- 'C'
 decision[train$Score <= 75 & train$Score > 70 ] <- 'C'
-decision[train$Score <= 75 & train$Score > 70 ] <- 'B'
-decision[train$Score <= 75 & train$Score > 70 ] <- 'C'
 decision[train$Score > 75 & train$Score <= 90 & train$Row <= 3 & train$Score <= 85] <- 'B'
 decision[train$Score > 75 & train$Score <= 90 & train$Row <= 3 & train$Score > 85 & train$Score <= 89] <- 'A'
 decision[train$Score > 75 & train$Score <= 90 & train$Row <= 3 & train$Score > 85 & train$Score > 89] <- 'B'
@@ -239,3 +237,4 @@ print(table(misclassified$Score, misclassified$Grade))
 
 
 #training accuracy of 95.62%, validation accuracy of 95.5%, difference is minimial so model is not overfitting
+
