@@ -39,10 +39,13 @@ colnames(validation_test)[colnames(validation_test) == "Deal"] <- "deal"
 validation_train$deal <- as.factor(validation_train$deal)
 validation_test$deal <- as.factor(validation_test$deal)
 
-tree_model <- rpart(deal ~ price_per_sqft + avgreview + borough, data = validation_train, method = "class")
+tree_model <- rpart(
+  deal ~ price_per_sqft + avgreview + borough, 
+  data = validation_train, 
+  method = "class",
+  control = rpart.control(cp = 0.001, minsplit = 5, maxdepth = 30)
+)
 rpart.plot(tree_model)
-
 tree_predictions <- predict(tree_model, newdata = validation_test, type = "class")
 tree_accuracy <- mean(tree_predictions == validation_test$deal)
-print(paste("Decision Tree Accuracy:", tree_accuracy))
-
+print(paste("Decision Tree Accuracy with Hyperparameter Tuning:", tree_accuracy))
