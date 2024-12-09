@@ -82,12 +82,12 @@ print(paste("Linear Regression Training Accuracy:", lm_train_accuracy * 100, "%"
 print(paste("Linear Regression Test Accuracy:", lm_test_accuracy * 100, "%"))
 
 if (!"id" %in% colnames(airbnb_test)) {
-  airbnb_test$id <- 1:nrow(airbnb_test)  # Add id if not already present
+  airbnb_test$id <- 1:nrow(airbnb_test)  
 }
-
+ 
 submission <- data.frame(
   id = airbnb_test$id,  
-  deal = predict(tree_model, newdata = airbnb_test, type = "class")  # Predictions
+  deal = predict(tree_model, newdata = airbnb_test, type = "class")  
 )
 
 write.csv(submission, "submission_airbnb.csv", row.names = FALSE)
